@@ -76,7 +76,7 @@ export default function Profile() {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center min-h-screen">
+      <div className="flex items-center justify-center min-h-screen text-black">
         <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500"></div>
       </div>
     );
@@ -118,7 +118,7 @@ export default function Profile() {
               <input
                 type="text"
                 placeholder="Enter your full name"
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition"
+                className="text-black w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 required
@@ -132,7 +132,7 @@ export default function Profile() {
               <input
                 type="text"
                 placeholder="e.g., React, Photography, Cooking"
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition"
+                className="text-black w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition"
                 value={offeredSkills}
                 onChange={(e) => setOfferedSkills(e.target.value)}
               />
@@ -146,7 +146,7 @@ export default function Profile() {
               <input
                 type="text"
                 placeholder="e.g., Python, Spanish, Guitar"
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition"
+                className="text-black w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition"
                 value={requestedSkills}
                 onChange={(e) => setRequestedSkills(e.target.value)}
               />
