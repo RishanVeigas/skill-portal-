@@ -52,7 +52,7 @@ export default function Login() {
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 px-4">
       <div className="w-full max-w-md">
-        {/* Logo/Header */}
+       
         <div className="text-center mb-8">
           <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-blue-600 to-indigo-600 rounded-2xl mb-4 shadow-lg shadow-blue-500/30">
             <span className="text-white font-bold text-2xl">PS</span>
@@ -121,7 +121,7 @@ export default function Login() {
           </button>
         </form>
 
-        {/* Back to Home Link */}
+        {/* Home Link */}
         <div className="text-center mt-6">
           <button
             onClick={() => router.push("/")}

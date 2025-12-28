@@ -5,8 +5,6 @@ import { useRouter } from "next/navigation";
 import { onAuthStateChanged } from "firebase/auth";
 import { auth, db } from "../firebase";
 import { doc, getDoc, setDoc, serverTimestamp } from "firebase/firestore";
-// Added Lucide icons for a professional look
-import { User, BookOpen, Sparkles, Save, ArrowLeft, Loader2 } from "lucide-react";
 
 export default function Profile() {
   const router = useRouter();
@@ -78,114 +76,92 @@ export default function Profile() {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex flex-col items-center justify-center bg-gray-50">
-        <Loader2 className="w-10 h-10 text-blue-600 animate-spin mb-4" />
-        <p className="text-gray-500 font-medium">Loading your profile...</p>
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500"></div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-[#f8fafc] px-4 py-12">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-2xl mx-auto">
-        {/* Top Navigation */}
-        <button 
-          onClick={() => router.back()}
-          className="flex items-center text-sm text-gray-500 hover:text-gray-800 transition-colors mb-6 group"
-        >
-          <ArrowLeft className="w-4 h-4 mr-2 group-hover:-translate-x-1 transition-transform" />
-          Back to Dashboard
-        </button>
+        <div className="mb-6">
+          <button 
+            onClick={() => router.back()}
+            className="text-blue-600 hover:text-blue-800 font-medium flex items-center gap-2 transition-colors"
+          >
+            <span>←</span> Back to Dashboard
+          </button>
+        </div>
 
-        <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
-          {/* Header Decoration */}
-          <div className="h-32 bg-gradient-to-r from-blue-600 to-indigo-700" />
-          
-          <div className="px-8 pb-8">
-            {/* Avatar Placeholder */}
-            <div className="relative -mt-12 mb-6">
-              <div className="inline-flex items-center justify-center w-24 h-24 bg-white rounded-2xl shadow-md border-4 border-white text-blue-600">
-                <User size={48} />
-              </div>
+        <div className="bg-white rounded-xl shadow-lg p-8">
+          <div className="border-b pb-6 mb-6">
+            <h1 className="text-3xl font-bold text-gray-800 mb-2">
+              Edit Profile
+            </h1>
+            <p className="text-gray-600">
+              Update your profile information and skills
+            </p>
+          </div>
+
+          {message && (
+            <div className={`mb-6 p-4 rounded-lg ${message.includes('Error') ? 'bg-red-50 border border-red-200 text-red-700' : 'bg-green-50 border border-green-200 text-green-700'}`}>
+              {message}
+            </div>
+          )}
+
+          <form onSubmit={handleSave} className="space-y-6">
+            <div>
+              <label className="block text-sm font-semibold text-gray-700 mb-2">
+                Full Name
+              </label>
+              <input
+                type="text"
+                placeholder="Enter your full name"
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                required
+              />
             </div>
 
-            <div className="mb-8">
-              <h2 className="text-2xl font-bold text-gray-900">
-                {name ? "Update Profile" : "Complete Your Profile"}
-              </h2>
-              <p className="text-gray-500 text-sm">
-                Share your expertise and find what you want to learn.
-              </p>
+            <div>
+              <label className="block text-sm font-semibold text-gray-700 mb-2">
+                Skills I Can Teach
+              </label>
+              <input
+                type="text"
+                placeholder="e.g., React, Photography, Cooking"
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition"
+                value={offeredSkills}
+                onChange={(e) => setOfferedSkills(e.target.value)}
+              />
+              <p className="mt-2 text-sm text-gray-500">Separate multiple skills with commas</p>
             </div>
 
-            {message && (
-              <div className={`p-4 rounded-lg mb-6 text-sm font-medium ${message.includes('Error') ? 'bg-red-50 text-red-700' : 'bg-green-50 text-green-700'}`}>
-                {message}
-              </div>
-            )}
+            <div>
+              <label className="block text-sm font-semibold text-gray-700 mb-2">
+                Skills I Want to Learn
+              </label>
+              <input
+                type="text"
+                placeholder="e.g., Python, Spanish, Guitar"
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition"
+                value={requestedSkills}
+                onChange={(e) => setRequestedSkills(e.target.value)}
+              />
+            </div>
 
-            <form onSubmit={handleSave} className="space-y-6">
-              {/* Name Field */}
-              <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-2">Full Name</label>
-                <div className="relative">
-                  <User className="absolute left-3 top-3.5 text-gray-400" size={18} />
-                  <input
-                    type="text"
-                    placeholder="Enter your name"
-                    className="w-full pl-10 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:bg-white outline-none transition-all"
-                    value={name}
-                    onChange={(e) => setName(e.target.value)}
-                    required
-                  />
-                </div>
-              </div>
-
-              {/* Offered Skills */}
-              <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-2">Skills I Can Teach</label>
-                <div className="relative">
-                  <Sparkles className="absolute left-3 top-3.5 text-gray-400" size={18} />
-                  <input
-                    type="text"
-                    placeholder="React, Cooking, Graphic Design..."
-                    className="w-full pl-10 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:bg-white outline-none transition-all"
-                    value={offeredSkills}
-                    onChange={(e) => setOfferedSkills(e.target.value)}
-                  />
-                </div>
-                <p className="mt-2 text-xs text-gray-400 italic">Separate skills with commas</p>
-              </div>
-
-              {/* Requested Skills */}
-              <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-2">Skills I Want To Learn</label>
-                <div className="relative">
-                  <BookOpen className="absolute left-3 top-3.5 text-gray-400" size={18} />
-                  <input
-                    type="text"
-                    placeholder="Python, Public Speaking, Spanish..."
-                    className="w-full pl-10 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:bg-white outline-none transition-all"
-                    value={requestedSkills}
-                    onChange={(e) => setRequestedSkills(e.target.value)}
-                  />
-                </div>
-              </div>
-
+            <div className="pt-4">
               <button
                 type="submit"
                 disabled={saving}
-                className="w-full flex items-center justify-center py-4 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl shadow-lg shadow-blue-200 transition-all active:scale-[0.98] disabled:opacity-70 disabled:cursor-not-allowed"
+                className="w-full bg-blue-600 text-white font-semibold py-3 px-6 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
               >
-                {saving ? (
-                  <Loader2 className="w-5 h-5 animate-spin mr-2" />
-                ) : (
-                  <Save className="w-5 h-5 mr-2" />
-                )}
-                {saving ? "Saving Changes..." : "Save Profile"}
+                {saving ? "Saving..." : "Save Changes"}
               </button>
-            </form>
-          </div>
+            </div>
+          </form>
         </div>
       </div>
     </div>
